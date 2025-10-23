@@ -243,7 +243,9 @@ export default function AgencyForm() {
     const templateParams = {
       email: 'officialayanfedavid@gmail.com',
       mobileNumber: formData.mobileNumber,
-      agencyName: formData.agencyName
+      agencyName: formData.agencyName,
+      country: formData.country,
+      message: `He has applied for a become agency.\nAgency Name: ${formData.agencyName}\nMobile Number: ${formData.mobileNumber}\nCountry: ${formData.country}`
     };
 
     // Send the email

@@ -201,6 +201,7 @@ const COUNTRIES = [
 
 export default function AgencyForm() {
   const [formData, setFormData] = useState({
+    id: "",
     agencyName: "",
     mobileNumber: "",
     country: "",
@@ -295,6 +296,21 @@ export default function AgencyForm() {
 
       {/* Form Section */}
       <form onSubmit={handleSubmit} className="space-y-5">
+        {/* ID Field */}
+        <div>
+          <label className="block text-sm font-medium text-gray-600 mb-2">ID</label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🆔</span>
+            <input
+              type="text"
+              name="id"
+              value={formData.id}
+              onChange={handleInputChange}
+              placeholder="Enter your id"
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+            />
+          </div>
+        </div>
         {/* Agency Name Field */}
         <div>
           <label className="block text-sm font-medium text-gray-600 mb-2">Agency Name</label>

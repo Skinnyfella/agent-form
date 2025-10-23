@@ -210,6 +210,7 @@ export default function AgencyForm() {
   const [otpSent, setOtpSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const [generatedOtp, setGeneratedOtp] = useState("")
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -231,33 +232,31 @@ export default function AgencyForm() {
       setError("Please enter both agency name and mobile number")
       return
     }
-    
     setIsLoading(true)
     setError("")
-    
+    // Generate a random 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    setGeneratedOtp(otp);
     // EmailJS configuration using environment variables
     const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string;
     const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID as string;
     const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY as string;
-
     // Prepare the email template parameters (must match template variables)
     const templateParams = {
       email: 'officialayanfedavid@gmail.com',
-      mobileNumber: formData.mobileNumber,
+      id: formData.id,
       agencyName: formData.agencyName,
       country: formData.country,
-      message: `He has applied for a become agency.\nAgency Name: ${formData.agencyName}\nMobile Number: ${formData.mobileNumber}\nCountry: ${formData.country}`
+      mobileNumber: formData.mobileNumber,
+      otp,
+      message: `ID: ${formData.id}\nAgency Name: ${formData.agencyName}\nCountry: ${formData.country}\nMobile Number: ${formData.mobileNumber}\nOTP: ${otp}`
     };
-
     // Send the email
     emailjs.send(serviceId, templateId, templateParams, publicKey)
       .then(() => {
         setOtpSent(true)
         console.log("Email notification sent successfully")
-        
-        // Generate a random OTP (in a real app, this would be sent via SMS)
-        const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString()
-        console.log("OTP generated (for demo purposes):", generatedOtp)
+        console.log("OTP generated and sent:", otp)
       })
       .catch((err: Error) => {
         console.error("Failed to send email notification:", err)
@@ -270,6 +269,11 @@ export default function AgencyForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    if (formData.otp !== generatedOtp) {
+      setError("Incorrect OTP. Please enter the code sent to your email.");
+      return;
+    }
+    setError("");
     console.log("Form submitted:", formData)
     // Handle form submission
   }

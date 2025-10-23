@@ -339,7 +339,10 @@ export default function AgencyForm() {
 
         {/* Country Dropdown */}
         <div>
-          <label className="block text-sm font-medium text-gray-600 mb-2">Country</label>
+          <div className="flex items-center mb-2">
+            <label className="block text-sm font-medium text-gray-600">Country</label>
+            <span className="text-xs text-red-500 ml-2 whitespace-nowrap">* Not to be alter once set</span>
+          </div>
           <div className="relative flex items-center gap-2">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🌍</span>
             <select
@@ -357,7 +360,6 @@ export default function AgencyForm() {
             </select>
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">▼</span>
           </div>
-          <span className="block text-xs text-red-500 mt-1 ml-8">* Not to be alter once set</span>
         </div>
 
         {/* Error message */}

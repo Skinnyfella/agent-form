@@ -203,7 +203,7 @@ export default function AgencyForm() {
   const [formData, setFormData] = useState({
     agencyName: "",
     mobileNumber: "",
-    country: "India",
+    country: "",
     otp: "",
   })
   const [otpSent, setOtpSent] = useState(false)
@@ -309,27 +309,6 @@ export default function AgencyForm() {
           </div>
         </div>
 
-        {/* Country Dropdown */}
-        <div>
-          <label className="block text-sm font-medium text-gray-600 mb-2">Country</label>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🌍</span>
-            <select
-              name="country"
-              value={formData.country}
-              onChange={handleCountryChange}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition appearance-none bg-white"
-            >
-              {COUNTRIES.map((country) => (
-                <option key={country} value={country}>
-                  {country}
-                </option>
-              ))}
-            </select>
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">▼</span>
-          </div>
-        </div>
-
         {/* Mobile Number Field with OTP Button */}
         <div>
           <label className="block text-sm font-medium text-gray-600 mb-2">Mobile Number</label>
@@ -356,6 +335,29 @@ export default function AgencyForm() {
               {isLoading ? "Sending..." : "Get OTP"}
             </button>
           </div>
+        </div>
+
+        {/* Country Dropdown */}
+        <div>
+          <label className="block text-sm font-medium text-gray-600 mb-2">Country</label>
+          <div className="relative flex items-center gap-2">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🌍</span>
+            <select
+              name="country"
+              value={formData.country}
+              onChange={handleCountryChange}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition appearance-none bg-white"
+            >
+              <option value="" disabled>Select your country</option>
+              {COUNTRIES.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">▼</span>
+          </div>
+          <span className="block text-xs text-red-500 mt-1 ml-8">* Not to be alter once set</span>
         </div>
 
         {/* Error message */}
@@ -388,5 +390,5 @@ export default function AgencyForm() {
         </button>
       </form>
     </div>
-  )
+  );
 }

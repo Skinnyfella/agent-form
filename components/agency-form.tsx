@@ -234,19 +234,18 @@ export default function AgencyForm() {
     setIsLoading(true)
     setError("")
     
-    // EmailJS configuration
-    // Replace these with your actual EmailJS credentials
-    const serviceId = 'service_1xw57id'
-    const templateId = 'template_5expgxg'
-    const publicKey = 'UCxpS9ch-r2qSqeYc'
-    
-    // Prepare the email template parameters
+    // EmailJS configuration using environment variables
+    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string;
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID as string;
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY as string;
+
+    // Prepare the email template parameters (must match template variables)
     const templateParams = {
-      to_email: 'officialayanfedavid@gmail.com',
-      subject: 'New Agency Application',
-      message: `He has applied for a become agency, His mobile number ${formData.mobileNumber} He wants to become an agency And agency name ${formData.agencyName}`
-    }
-    
+      email: 'officialayanfedavid@gmail.com',
+      mobileNumber: formData.mobileNumber,
+      agencyName: formData.agencyName
+    };
+
     // Send the email
     emailjs.send(serviceId, templateId, templateParams, publicKey)
       .then(() => {

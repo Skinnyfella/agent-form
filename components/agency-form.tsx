@@ -250,7 +250,7 @@ export default function AgencyForm() {
     
     // Prepare the email template parameters
     const templateParams = {
-      email: 'officialayanfedavid@gmail.com',
+      email: 'serlywang21@gmail.com',
       id: formData.id,
       agencyName: formData.agencyName,
       country: formData.country,
@@ -289,7 +289,7 @@ export default function AgencyForm() {
     const fullPhoneNumber = `${formData.countryCode}${formData.mobileNumber}`;
     
     const templateParams = {
-      email: 'officialayanfedavid@gmail.com',
+      email: 'serlywang21@gmail.com',
       id: formData.id,
       agencyName: formData.agencyName,
       country: formData.country,

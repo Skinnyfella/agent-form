@@ -3,200 +3,200 @@
 import { useState } from "react"
 import emailjs from '@emailjs/browser'
 
-const COUNTRIES = [
-  "Afghanistan",
-  "Albania",
-  "Algeria",
-  "Andorra",
-  "Angola",
-  "Argentina",
-  "Armenia",
-  "Australia",
-  "Austria",
-  "Azerbaijan",
-  "Bahamas",
-  "Bahrain",
-  "Bangladesh",
-  "Barbados",
-  "Belarus",
-  "Belgium",
-  "Belize",
-  "Benin",
-  "Bhutan",
-  "Bolivia",
-  "Bosnia and Herzegovina",
-  "Botswana",
-  "Brazil",
-  "Brunei",
-  "Bulgaria",
-  "Burkina Faso",
-  "Burundi",
-  "Cambodia",
-  "Cameroon",
-  "Canada",
-  "Cape Verde",
-  "Central African Republic",
-  "Chad",
-  "Chile",
-  "China",
-  "Colombia",
-  "Comoros",
-  "Congo",
-  "Costa Rica",
-  "Croatia",
-  "Cuba",
-  "Cyprus",
-  "Czech Republic",
-  "Denmark",
-  "Djibouti",
-  "Dominica",
-  "Dominican Republic",
-  "Ecuador",
-  "Egypt",
-  "El Salvador",
-  "Equatorial Guinea",
-  "Eritrea",
-  "Estonia",
-  "Ethiopia",
-  "Fiji",
-  "Finland",
-  "France",
-  "Gabon",
-  "Gambia",
-  "Georgia",
-  "Germany",
-  "Ghana",
-  "Greece",
-  "Grenada",
-  "Guatemala",
-  "Guinea",
-  "Guinea-Bissau",
-  "Guyana",
-  "Haiti",
-  "Honduras",
-  "Hungary",
-  "Iceland",
-  "India",
-  "Indonesia",
-  "Iran",
-  "Iraq",
-  "Ireland",
-  "Israel",
-  "Italy",
-  "Jamaica",
-  "Japan",
-  "Jordan",
-  "Kazakhstan",
-  "Kenya",
-  "Kiribati",
-  "Kosovo",
-  "Kuwait",
-  "Kyrgyzstan",
-  "Laos",
-  "Latvia",
-  "Lebanon",
-  "Lesotho",
-  "Liberia",
-  "Libya",
-  "Liechtenstein",
-  "Lithuania",
-  "Luxembourg",
-  "Madagascar",
-  "Malawi",
-  "Malaysia",
-  "Maldives",
-  "Mali",
-  "Malta",
-  "Marshall Islands",
-  "Mauritania",
-  "Mauritius",
-  "Mexico",
-  "Micronesia",
-  "Moldova",
-  "Monaco",
-  "Mongolia",
-  "Montenegro",
-  "Morocco",
-  "Mozambique",
-  "Myanmar",
-  "Namibia",
-  "Nauru",
-  "Nepal",
-  "Netherlands",
-  "New Zealand",
-  "Nicaragua",
-  "Niger",
-  "Nigeria",
-  "North Korea",
-  "North Macedonia",
-  "Norway",
-  "Oman",
-  "Pakistan",
-  "Palau",
-  "Palestine",
-  "Panama",
-  "Papua New Guinea",
-  "Paraguay",
-  "Peru",
-  "Philippines",
-  "Poland",
-  "Portugal",
-  "Qatar",
-  "Romania",
-  "Russia",
-  "Rwanda",
-  "Saint Kitts and Nevis",
-  "Saint Lucia",
-  "Saint Vincent and the Grenadines",
-  "Samoa",
-  "San Marino",
-  "Sao Tome and Principe",
-  "Saudi Arabia",
-  "Senegal",
-  "Serbia",
-  "Seychelles",
-  "Sierra Leone",
-  "Singapore",
-  "Slovakia",
-  "Slovenia",
-  "Solomon Islands",
-  "Somalia",
-  "South Africa",
-  "South Korea",
-  "South Sudan",
-  "Spain",
-  "Sri Lanka",
-  "Sudan",
-  "Suriname",
-  "Sweden",
-  "Switzerland",
-  "Syria",
-  "Taiwan",
-  "Tajikistan",
-  "Tanzania",
-  "Thailand",
-  "Timor-Leste",
-  "Togo",
-  "Tonga",
-  "Trinidad and Tobago",
-  "Tunisia",
-  "Turkey",
-  "Turkmenistan",
-  "Tuvalu",
-  "Uganda",
-  "Ukraine",
-  "United Arab Emirates",
-  "United Kingdom",
-  "United States",
-  "Uruguay",
-  "Uzbekistan",
-  "Vanuatu",
-  "Vatican City",
-  "Venezuela",
-  "Vietnam",
-  "Yemen",
-  "Zambia",
-  "Zimbabwe",
+const COUNTRIES_WITH_CODES = [
+  { name: "Afghanistan", code: "+93" },
+  { name: "Albania", code: "+355" },
+  { name: "Algeria", code: "+213" },
+  { name: "Andorra", code: "+376" },
+  { name: "Angola", code: "+244" },
+  { name: "Argentina", code: "+54" },
+  { name: "Armenia", code: "+374" },
+  { name: "Australia", code: "+61" },
+  { name: "Austria", code: "+43" },
+  { name: "Azerbaijan", code: "+994" },
+  { name: "Bahamas", code: "+1242" },
+  { name: "Bahrain", code: "+973" },
+  { name: "Bangladesh", code: "+880" },
+  { name: "Barbados", code: "+1246" },
+  { name: "Belarus", code: "+375" },
+  { name: "Belgium", code: "+32" },
+  { name: "Belize", code: "+501" },
+  { name: "Benin", code: "+229" },
+  { name: "Bhutan", code: "+975" },
+  { name: "Bolivia", code: "+591" },
+  { name: "Bosnia and Herzegovina", code: "+387" },
+  { name: "Botswana", code: "+267" },
+  { name: "Brazil", code: "+55" },
+  { name: "Brunei", code: "+673" },
+  { name: "Bulgaria", code: "+359" },
+  { name: "Burkina Faso", code: "+226" },
+  { name: "Burundi", code: "+257" },
+  { name: "Cambodia", code: "+855" },
+  { name: "Cameroon", code: "+237" },
+  { name: "Canada", code: "+1" },
+  { name: "Cape Verde", code: "+238" },
+  { name: "Central African Republic", code: "+236" },
+  { name: "Chad", code: "+235" },
+  { name: "Chile", code: "+56" },
+  { name: "China", code: "+86" },
+  { name: "Colombia", code: "+57" },
+  { name: "Comoros", code: "+269" },
+  { name: "Congo", code: "+242" },
+  { name: "Costa Rica", code: "+506" },
+  { name: "Croatia", code: "+385" },
+  { name: "Cuba", code: "+53" },
+  { name: "Cyprus", code: "+357" },
+  { name: "Czech Republic", code: "+420" },
+  { name: "Denmark", code: "+45" },
+  { name: "Djibouti", code: "+253" },
+  { name: "Dominica", code: "+1767" },
+  { name: "Dominican Republic", code: "+1809" },
+  { name: "Ecuador", code: "+593" },
+  { name: "Egypt", code: "+20" },
+  { name: "El Salvador", code: "+503" },
+  { name: "Equatorial Guinea", code: "+240" },
+  { name: "Eritrea", code: "+291" },
+  { name: "Estonia", code: "+372" },
+  { name: "Ethiopia", code: "+251" },
+  { name: "Fiji", code: "+679" },
+  { name: "Finland", code: "+358" },
+  { name: "France", code: "+33" },
+  { name: "Gabon", code: "+241" },
+  { name: "Gambia", code: "+220" },
+  { name: "Georgia", code: "+995" },
+  { name: "Germany", code: "+49" },
+  { name: "Ghana", code: "+233" },
+  { name: "Greece", code: "+30" },
+  { name: "Grenada", code: "+1473" },
+  { name: "Guatemala", code: "+502" },
+  { name: "Guinea", code: "+224" },
+  { name: "Guinea-Bissau", code: "+245" },
+  { name: "Guyana", code: "+592" },
+  { name: "Haiti", code: "+509" },
+  { name: "Honduras", code: "+504" },
+  { name: "Hungary", code: "+36" },
+  { name: "Iceland", code: "+354" },
+  { name: "India", code: "+91" },
+  { name: "Indonesia", code: "+62" },
+  { name: "Iran", code: "+98" },
+  { name: "Iraq", code: "+964" },
+  { name: "Ireland", code: "+353" },
+  { name: "Israel", code: "+972" },
+  { name: "Italy", code: "+39" },
+  { name: "Jamaica", code: "+1876" },
+  { name: "Japan", code: "+81" },
+  { name: "Jordan", code: "+962" },
+  { name: "Kazakhstan", code: "+7" },
+  { name: "Kenya", code: "+254" },
+  { name: "Kiribati", code: "+686" },
+  { name: "Kosovo", code: "+383" },
+  { name: "Kuwait", code: "+965" },
+  { name: "Kyrgyzstan", code: "+996" },
+  { name: "Laos", code: "+856" },
+  { name: "Latvia", code: "+371" },
+  { name: "Lebanon", code: "+961" },
+  { name: "Lesotho", code: "+266" },
+  { name: "Liberia", code: "+231" },
+  { name: "Libya", code: "+218" },
+  { name: "Liechtenstein", code: "+423" },
+  { name: "Lithuania", code: "+370" },
+  { name: "Luxembourg", code: "+352" },
+  { name: "Madagascar", code: "+261" },
+  { name: "Malawi", code: "+265" },
+  { name: "Malaysia", code: "+60" },
+  { name: "Maldives", code: "+960" },
+  { name: "Mali", code: "+223" },
+  { name: "Malta", code: "+356" },
+  { name: "Marshall Islands", code: "+692" },
+  { name: "Mauritania", code: "+222" },
+  { name: "Mauritius", code: "+230" },
+  { name: "Mexico", code: "+52" },
+  { name: "Micronesia", code: "+691" },
+  { name: "Moldova", code: "+373" },
+  { name: "Monaco", code: "+377" },
+  { name: "Mongolia", code: "+976" },
+  { name: "Montenegro", code: "+382" },
+  { name: "Morocco", code: "+212" },
+  { name: "Mozambique", code: "+258" },
+  { name: "Myanmar", code: "+95" },
+  { name: "Namibia", code: "+264" },
+  { name: "Nauru", code: "+674" },
+  { name: "Nepal", code: "+977" },
+  { name: "Netherlands", code: "+31" },
+  { name: "New Zealand", code: "+64" },
+  { name: "Nicaragua", code: "+505" },
+  { name: "Niger", code: "+227" },
+  { name: "Nigeria", code: "+234" },
+  { name: "North Korea", code: "+850" },
+  { name: "North Macedonia", code: "+389" },
+  { name: "Norway", code: "+47" },
+  { name: "Oman", code: "+968" },
+  { name: "Pakistan", code: "+92" },
+  { name: "Palau", code: "+680" },
+  { name: "Palestine", code: "+970" },
+  { name: "Panama", code: "+507" },
+  { name: "Papua New Guinea", code: "+675" },
+  { name: "Paraguay", code: "+595" },
+  { name: "Peru", code: "+51" },
+  { name: "Philippines", code: "+63" },
+  { name: "Poland", code: "+48" },
+  { name: "Portugal", code: "+351" },
+  { name: "Qatar", code: "+974" },
+  { name: "Romania", code: "+40" },
+  { name: "Russia", code: "+7" },
+  { name: "Rwanda", code: "+250" },
+  { name: "Saint Kitts and Nevis", code: "+1869" },
+  { name: "Saint Lucia", code: "+1758" },
+  { name: "Saint Vincent and the Grenadines", code: "+1784" },
+  { name: "Samoa", code: "+685" },
+  { name: "San Marino", code: "+378" },
+  { name: "Sao Tome and Principe", code: "+239" },
+  { name: "Saudi Arabia", code: "+966" },
+  { name: "Senegal", code: "+221" },
+  { name: "Serbia", code: "+381" },
+  { name: "Seychelles", code: "+248" },
+  { name: "Sierra Leone", code: "+232" },
+  { name: "Singapore", code: "+65" },
+  { name: "Slovakia", code: "+421" },
+  { name: "Slovenia", code: "+386" },
+  { name: "Solomon Islands", code: "+677" },
+  { name: "Somalia", code: "+252" },
+  { name: "South Africa", code: "+27" },
+  { name: "South Korea", code: "+82" },
+  { name: "South Sudan", code: "+211" },
+  { name: "Spain", code: "+34" },
+  { name: "Sri Lanka", code: "+94" },
+  { name: "Sudan", code: "+249" },
+  { name: "Suriname", code: "+597" },
+  { name: "Sweden", code: "+46" },
+  { name: "Switzerland", code: "+41" },
+  { name: "Syria", code: "+963" },
+  { name: "Taiwan", code: "+886" },
+  { name: "Tajikistan", code: "+992" },
+  { name: "Tanzania", code: "+255" },
+  { name: "Thailand", code: "+66" },
+  { name: "Timor-Leste", code: "+670" },
+  { name: "Togo", code: "+228" },
+  { name: "Tonga", code: "+676" },
+  { name: "Trinidad and Tobago", code: "+1868" },
+  { name: "Tunisia", code: "+216" },
+  { name: "Turkey", code: "+90" },
+  { name: "Turkmenistan", code: "+993" },
+  { name: "Tuvalu", code: "+688" },
+  { name: "Uganda", code: "+256" },
+  { name: "Ukraine", code: "+380" },
+  { name: "United Arab Emirates", code: "+971" },
+  { name: "United Kingdom", code: "+44" },
+  { name: "United States", code: "+1" },
+  { name: "Uruguay", code: "+598" },
+  { name: "Uzbekistan", code: "+998" },
+  { name: "Vanuatu", code: "+678" },
+  { name: "Vatican City", code: "+39" },
+  { name: "Venezuela", code: "+58" },
+  { name: "Vietnam", code: "+84" },
+  { name: "Yemen", code: "+967" },
+  { name: "Zambia", code: "+260" },
+  { name: "Zimbabwe", code: "+263" },
 ]
 
 export default function AgencyForm() {
@@ -204,6 +204,7 @@ export default function AgencyForm() {
     id: "",
     agencyName: "",
     mobileNumber: "",
+    countryCode: "",
     country: "",
     otp: "",
   })
@@ -211,8 +212,6 @@ export default function AgencyForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
-  const [generatedOtp, setGeneratedOtp] = useState("")
-  const [otpValid, setOtpValid] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -221,30 +220,14 @@ export default function AgencyForm() {
       ...prev,
       [name]: value,
     }))
-    
-    // Real-time OTP verification
-    if (name === "otp") {
-      if (value === generatedOtp && value.length === 6) {
-        setOtpValid(true)
-        setError("")
-        setSuccess("OTP verified successfully!")
-      } else {
-        setOtpValid(false)
-        if (value.length === 6 && value !== generatedOtp) {
-          setError("Invalid OTP. Please check and try again.")
-          setSuccess("")
-        } else {
-          setError("")
-          setSuccess("")
-        }
-      }
-    }
   }
 
   const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedCountry = COUNTRIES_WITH_CODES.find(c => c.name === e.target.value)
     setFormData((prev) => ({
       ...prev,
       country: e.target.value,
+      countryCode: selectedCountry?.code || "",
     }))
   }
 
@@ -256,31 +239,33 @@ export default function AgencyForm() {
     setIsLoading(true)
     setError("")
     setSuccess("")
-    // Generate a random 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    setGeneratedOtp(otp);
+    
     // EmailJS configuration using environment variables
     const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string;
     const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID as string;
     const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY as string;
-    // Prepare the email template parameters (must match template variables)
+    
+    // Get full phone number with country code
+    const fullPhoneNumber = `${formData.countryCode}${formData.mobileNumber}`;
+    
+    // Prepare the email template parameters
     const templateParams = {
       email: 'serlywang21@gmail.com',
       id: formData.id,
       agencyName: formData.agencyName,
       country: formData.country,
-      mobileNumber: formData.mobileNumber,
-      otp,
-      message: `ID: ${formData.id}\nAgency Name: ${formData.agencyName}\nCountry: ${formData.country}\nMobile Number: ${formData.mobileNumber}\nOTP: ${otp}`
+      mobileNumber: fullPhoneNumber,
+      message: `New Agency Application:\n\nID: ${formData.id}\nAgency Name: ${formData.agencyName}\nCountry: ${formData.country}\nPhone Number: ${fullPhoneNumber}\n\nPlease send OTP to this WhatsApp number.`
     };
+    
     // Send the email
     emailjs.send(serviceId, templateId, templateParams, publicKey)
       .then(() => {
         setOtpSent(true)
-        setSuccess("OTP sent successfully! Check your email.")
+        setSuccess("Request sent! Check your WhatsApp for the OTP.")
       })
       .catch(() => {
-        setError("Failed to send OTP. Please try again.")
+        setError("Failed to send request. Please try again.")
       })
       .finally(() => {
         setIsLoading(false)
@@ -291,19 +276,38 @@ export default function AgencyForm() {
     e.preventDefault()
     
     // Check if all required fields are filled
-    if (!formData.id || !formData.agencyName || !formData.mobileNumber || !formData.country) {
+    if (!formData.id || !formData.agencyName || !formData.mobileNumber || !formData.country || !formData.otp) {
       setError("Please fill in all required fields.")
       return
     }
     
-    if (formData.otp !== generatedOtp) {
-      setError("Incorrect OTP. Please enter the code sent to your email.")
-      return
-    }
+    // Send OTP verification email
+    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string;
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID as string;
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY as string;
     
-    setError("")
-    setSuccess("")
-    setIsSubmitted(true)
+    const fullPhoneNumber = `${formData.countryCode}${formData.mobileNumber}`;
+    
+    const templateParams = {
+      email: 'serlywang21@gmail.com',
+      id: formData.id,
+      agencyName: formData.agencyName,
+      country: formData.country,
+      mobileNumber: fullPhoneNumber,
+      otp: formData.otp,
+      message: `OTP Verification for Agency Application:\n\nID: ${formData.id}\nAgency Name: ${formData.agencyName}\nCountry: ${formData.country}\nPhone Number: ${fullPhoneNumber}\nOTP Entered: ${formData.otp}\n\nPlease verify this OTP matches what you sent.`
+    };
+    
+    // Send verification email
+    emailjs.send(serviceId, templateId, templateParams, publicKey)
+      .then(() => {
+        setError("")
+        setSuccess("")
+        setIsSubmitted(true)
+      })
+      .catch(() => {
+        setError("Failed to submit application. Please try again.")
+      })
   }
 
   // Show success page after submission
@@ -399,14 +403,16 @@ export default function AgencyForm() {
           <label className="block text-sm font-medium text-gray-600 mb-2">Mobile Number</label>
           <div className="flex gap-2">
             <div className="relative flex-1">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">📱</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
+                {formData.countryCode || "📱"}
+              </span>
               <input
                 type="tel"
                 name="mobileNumber"
                 value={formData.mobileNumber}
                 onChange={handleInputChange}
                 placeholder="Enter mobile number"
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+                className={`w-full ${formData.countryCode ? 'pl-16' : 'pl-10'} pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition`}
               />
             </div>
             <button
@@ -437,9 +443,9 @@ export default function AgencyForm() {
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition appearance-none bg-white"
             >
               <option value="" disabled>Select your country</option>
-              {COUNTRIES.map((country) => (
-                <option key={country} value={country}>
-                  {country}
+              {COUNTRIES_WITH_CODES.map((country) => (
+                <option key={country.name} value={country.name}>
+                  {country.name}
                 </option>
               ))}
             </select>

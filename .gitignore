@@ -1,8 +1,4 @@
-# Initialize git repository if not already initialized
-git init
-
-# Add the following to .gitignore
-echo "# dependencies
+# dependencies
 /node_modules
 /.pnp
 .pnp.js
@@ -34,8 +30,4 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts" > .gitignore
-
-# Add files and make initial commit
-git add .
-git commit -m "Initial commit"
+next-env.d.ts

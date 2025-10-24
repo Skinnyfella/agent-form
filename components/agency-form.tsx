@@ -210,6 +210,7 @@ export default function AgencyForm() {
   })
   const [otpSent, setOtpSent] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
   const [isSubmitted, setIsSubmitted] = useState(false)
@@ -275,11 +276,18 @@ export default function AgencyForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     
+    // Prevent double submission
+    if (isSubmitting) return;
+    
     // Check if all required fields are filled
     if (!formData.id || !formData.agencyName || !formData.mobileNumber || !formData.country || !formData.otp) {
       setError("Please fill in all required fields.")
       return
     }
+    
+    setIsSubmitting(true)
+    setError("")
+    setSuccess("")
     
     // Send OTP verification email
     const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string;
@@ -301,12 +309,13 @@ export default function AgencyForm() {
     // Send verification email
     emailjs.send(serviceId, templateId, templateParams, publicKey)
       .then(() => {
-        setError("")
-        setSuccess("")
         setIsSubmitted(true)
       })
       .catch(() => {
         setError("Failed to submit application. Please try again.")
+      })
+      .finally(() => {
+        setIsSubmitting(false)
       })
   }
 
@@ -480,9 +489,21 @@ export default function AgencyForm() {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
+          disabled={isSubmitting}
+          className={`w-full py-3 font-semibold rounded-lg transition flex items-center justify-center gap-2 ${
+            isSubmitting 
+              ? "bg-gray-400 cursor-not-allowed" 
+              : "bg-green-500 hover:bg-green-600"
+          } text-white`}
         >
-          Submit Application
+          {isSubmitting ? (
+            <>
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              Submitting...
+            </>
+          ) : (
+            "Submit Application"
+          )}
         </button>
       </form>
     </div>

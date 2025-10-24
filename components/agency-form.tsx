@@ -291,8 +291,15 @@ export default function AgencyForm() {
     
     // Send OTP verification email
     const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID as string;
-    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID_VERIFICATION as string;
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID_VERIFICATION as string; // Temporarily use same template
     const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY as string;
+    
+    // Check if environment variables are loaded
+    if (!serviceId || !templateId || !publicKey) {
+      setError("Configuration error. Please contact support.")
+      setIsSubmitting(false)
+      return
+    }
     
     const fullPhoneNumber = `${formData.countryCode}${formData.mobileNumber}`;
     
@@ -311,8 +318,15 @@ export default function AgencyForm() {
       .then(() => {
         setIsSubmitted(true)
       })
-      .catch(() => {
-        setError("Failed to submit application. Please try again.")
+      .catch((error) => {
+        console.error("EmailJS Error:", error)
+        if (error.status === 400) {
+          setError("Template configuration error. Please contact support.")
+        } else if (error.status === 401) {
+          setError("Authentication error. Please contact support.")
+        } else {
+          setError("Failed to submit application. Please try again.")
+        }
       })
       .finally(() => {
         setIsSubmitting(false)

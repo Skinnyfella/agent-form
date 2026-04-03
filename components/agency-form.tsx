@@ -1,7 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import emailjs from '@emailjs/browser'
+
+type AgencyFormData = {
+  id: string
+  agencyName: string
+  mobileNumber: string
+  countryCode: string
+  country: string
+  otp: string
+}
 
 const COUNTRIES_WITH_CODES = [
   { name: "Afghanistan", code: "+93" },
@@ -200,7 +209,7 @@ const COUNTRIES_WITH_CODES = [
 ]
 
 export default function AgencyForm() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<AgencyFormData>({
     id: "",
     agencyName: "",
     mobileNumber: "",
@@ -217,9 +226,10 @@ export default function AgencyForm() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
+    const key = name as keyof AgencyFormData
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [key]: value,
     }))
   }
 
